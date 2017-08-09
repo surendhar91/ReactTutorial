@@ -5,6 +5,7 @@ class App extends React.Component{
   }
 }
 class LoginControl extends React.Component{
+    //Based on state/condition, show this component. Have this logic in LoginControl
     constructor(props){
         super(props);
         this.state = {isLoggedIn:false};
