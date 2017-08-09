@@ -1,39 +1,30 @@
 import React from 'react';
 class App extends React.Component{
   render() {
-    return <Clock/>;
+    return <Toggle/>;
   }
 }
-class Clock extends React.Component{
-    //Goal: timer code has to be added in this clock component itself.
+class Toggle extends React.Component{
     constructor(props){
-        super(props);//should always be called first.
-        this.state = {date:new Date()};
+        super(props);
+        this.state = {isToggleOn:true};
+        this.handleClick = this.handleClick.bind(this);//this must be set in constructor, on initial construction of the object
     }
-
-    componentDidMount(){
-        //this.state and this.props are provided by react as default,
-        //however we can add member variables as long as they are not displayed in the ui
-        this.timerID = setInterval(()=>{this.tick()},1000);
+    handleClick(){
+        console.log("click event called..changing the state "+this.state.isToggleOn);
+        // Parenthesize the body of function to return an object literal expression:
+        this.setState(prevState=>({
+            isToggleOn : !prevState.isToggleOn
+        }));
+        //reverse the state based on previous state object.
     }
-
-    componentWillUnmount(){
-        clearInterval(this.timerID);
-    }
-
-    tick(){
-        this.setState({date:new Date()});//changing the state, whenever a state is changed, render method will be called
-        //a virtual component will be constructed in virtual dom and checked against the real dom, taking the diff and updating in the ui
-    }
-
     render() {
-        /*get the date from state object(props is a ead only date)*/
-        //pass the child component, state's date..
-        return (<div>
-            <h1>Hello,World!</h1>
-            <h2>It is {this.state.date.toLocaleTimeString()}</h2>
-        </div>);
+        //once constructed, render method will be called,
+        return (<button onClick={this.handleClick}>
+            {this.state.isToggleOn?'ON':'OFF'}
+        </button>);
     }
+
 }
 export default App;
 
