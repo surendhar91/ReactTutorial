@@ -1,31 +1,57 @@
 import React from 'react';
 class App extends React.Component{
   render() {
-    return <Toggle/>;
+    return <LoginControl/>;
   }
 }
-class Toggle extends React.Component{
+class LoginControl extends React.Component{
     constructor(props){
         super(props);
-        this.state = {isToggleOn:true};
-        this.handleClick = this.handleClick.bind(this);//this must be set in constructor, on initial construction of the object
+        this.state = {isLoggedIn:false};
+        this.handleLoginAction = this.handleLoginAction.bind(this);
+        this.handleLogoutAction = this.handleLogoutAction.bind(this);
     }
-    handleClick(){
-        console.log("click event called..changing the state "+this.state.isToggleOn);
-        // Parenthesize the body of function to return an object literal expression:
-        this.setState(prevState=>({
-            isToggleOn : !prevState.isToggleOn
-        }));
-        //reverse the state based on previous state object.
-    }
-    render() {
-        //once constructed, render method will be called,
-        //binding in render method is not recommended, if this handleClick callback is passed as a prop to lower components, those components might do an extra re-rendering.
-        return (<button onClick={this.handleClick}>
-            {this.state.isToggleOn?'ON':'OFF'}
-        </button>);
+    handleLoginAction(){
+        this.setState({isLoggedIn:true});
     }
 
+    handleLogoutAction(){
+        this.setState({isLoggedIn:false});
+    }
+    render(){
+        let button = null;
+        let isLoggedIn = this.state.isLoggedIn;
+        if(isLoggedIn){
+            button = <LogoutButton onClick={this.handleLogoutAction}/>;//you shouldn't call the function
+            //passing the onclick action to lower level components.
+        }else{
+            button = <LoginButton onClick={this.handleLoginAction}/>;
+        }
+        return (<div><Greeting isLoggedIn={isLoggedIn}/>{button}</div>);
+    }
+
+}
+function LoginButton(props){
+    return (<button onClick={props.onClick}>Login</button>);
+}
+function LogoutButton(props){
+    return (<button onClick={props.onClick}>Logout</button>);
+}
+function Greeting(props){
+    let greeting = null;
+    if(props.isLoggedIn){
+        greeting = <UserGreeting />;
+    }else{
+        greeting = <GuestGreeting />;
+    }
+    return greeting;
+}
+//conditional components
+function UserGreeting(props){
+    return <h1>Welcome Back!</h1>;
+}
+function GuestGreeting(props){
+    return <h1>Please Sign up</h1>;
 }
 export default App;
 
