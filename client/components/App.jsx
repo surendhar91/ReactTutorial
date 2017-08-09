@@ -20,6 +20,7 @@ class Toggle extends React.Component{
     }
     render() {
         //once constructed, render method will be called,
+        //binding in render method is not recommended, if this handleClick callback is passed as a prop to lower components, those components might do an extra re-rendering.
         return (<button onClick={this.handleClick}>
             {this.state.isToggleOn?'ON':'OFF'}
         </button>);
