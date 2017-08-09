@@ -1,26 +1,34 @@
 import React from 'react';
 import Avatar from './Avatar.jsx';
-function formatDate(date) {
-    return date.toLocaleDateString();
-}
-export default function Comment(props){
+class Comment extends React.Component{
+    formatDate(date) {//dont prefix function
+        return date.toLocaleDateString();
+    }
     //export defualt is must, when you import this component elsewhere.
-    return (
-        <div className="Comment">
-            <div className="UserInfo">
-                <Avatar user={props.author} />
-                <div className="UserInfo-name">
-                    {props.author.name}
+    render() {
+        let props = this.props;
+        //you can change the inner object value, only the reassignment of object cannot be done.
+        return (
+            <div className="Comment">
+                <UserInfo user={props.author}/>
+                <div className="Comment-text">
+                    {props.text}
+                </div>
+                <div className="Comment-date">
+                    {this.formatDate(props.date)}
                 </div>
             </div>
-            <div className="Comment-text">
-                {props.text}
-            </div>
-            <div className="Comment-date">
-                {formatDate(props.date)}
-            </div>
-        </div>
-    );
+        );
+    }
 }
+function UserInfo(props){
+    return <div className="UserInfo">
+        <Avatar user={props.user}/>
+        <div className="UserInfo-name">
+            {props.user.name}
+        </div>
+    </div>;
+}
+export default Comment;
 
 
