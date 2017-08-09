@@ -8,7 +8,15 @@ function Welcome(props){
 
 function tick() {
     const element = (<h1>It is {new Date().toLocaleTimeString()}.</h1>);
-    ReactDOM.render(<Welcome name="surendhar"/>, document.getElementById('root'));
+    ReactDOM.render(<WelcomeApp />, document.getElementById('root'));
 }
-
+function WelcomeApp(){
+    return (
+        <div>
+            <Welcome name="surendhar"/>
+            <Welcome name="sindhu"/>
+            <Welcome name="suganya"/>
+        </div>
+    );
+}
 setInterval(tick, 1000);
