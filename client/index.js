@@ -11,6 +11,7 @@ function tick() {
     ReactDOM.render(<WelcomeApp />, document.getElementById('root'));
 }
 function WelcomeApp(){
+    //components must return a single root element, this is why we added a div tag here
     return (
         <div>
             <Welcome name="surendhar"/>
