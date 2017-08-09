@@ -1,21 +1,36 @@
 import React from 'react';
-class App extends React.Component{
-  render() {
-    const numbers = [1,2,3,4,5];
-    return (<NumberList numbers={numbers}/>);
-  }
+class App extends React.Component {
+    render() {
+        return (<Reservation/>)
+    }
 }
-function NumberList(props) {
-    const numbers = props.numbers;
-    return (<div><ul>{
-        numbers.map((number)=>(
-            //everything that's inside the map, should be given key, so that react will efficiently identify the list item added,removed or changed.
-            <ListItem key={number.toString()} value={number} />)
-        //if you were to return, then use curly braces.
-    )}</ul></div>);
-}
-function ListItem(props){
-    return (<li>{props.value}</li>);
+class Reservation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isGoing: true,
+            numberOfGuests: 2
+        };
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    handleInputChange(event){
+        const target = event.target;
+        const value = target.type == 'checkbox'? target.checked:target.value;
+        const name  = target.name;
+        this.setState({[name]: value});//compute the target name on the fly.
+    }
+
+    render() {
+        return (
+            <form>
+                Is going:<input name="isGoing" checked={this.state.isGoing} type="checkbox"
+                                onChange={this.handleInputChange}/>
+                Number of guests:<input name="numberOfGuests" type="text" value={this.state.numberOfGuests}
+                                        onChange={this.handleInputChange}/>
+            </form>
+        );
+    }
 }
 export default App;
 
