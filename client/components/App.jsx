@@ -1,45 +1,39 @@
 import React from 'react';
-import Comment from './Comment.jsx';
-const comment = {
-    date: new Date(),
-    text: 'I hope you enjoy learning React!',
-    author: {
-        name: 'Hello Kitty',
-        avatarUrl: 'http://placekitten.com/g/64/64'
-    },
-    test: ()=>{
-      console.log("Render function called..")
-    },
-    callBack: (logger) => {
-        logger.log("surendhar");
-    }
-};// comment is an instance (javascript object)
-var properties = class properties{//named class expresions
-    constructor(name, callBackFunc){
-        this.name = name;
-        this.callBackFunc = callBackFunc;
-    }
-}
-var Model = class{//unnamed class expressions.
-    constructor(properties){
-        this.properties = properties;
-    }
-    toObject(){
-        return this.properties;
-    }
-    get string(){
-        this.properties.callBackFunc();
-        return this.properties.name;
-    }
-}
-//object creating an instance of the Model class.
-var jack = new Model(new properties("jack", ()=>{console.log("call back function initiated.")}));
 class App extends React.Component{
   render() {
-      comment.test();
-      console.log(jack.string);
-    return (<div><Comment date={comment.date} text={comment.text} author={comment.author}/></div>);
+    return <Clock/>;
   }
+}
+class Clock extends React.Component{
+    //Goal: timer code has to be added in this clock component itself.
+    constructor(props){
+        super(props);//should always be called first.
+        this.state = {date:new Date()};
+    }
+
+    componentDidMount(){
+        //this.state and this.props are provided by react as default,
+        //however we can add member variables as long as they are not displayed in the ui
+        this.timerID = setInterval(()=>{this.tick()},1000);
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.timerID);
+    }
+
+    tick(){
+        this.setState({date:new Date()});//changing the state, whenever a state is changed, render method will be called
+        //a virtual component will be constructed in virtual dom and checked against the real dom, taking the diff and updating in the ui
+    }
+
+    render() {
+        /*get the date from state object(props is a ead only date)*/
+        //pass the child component, state's date..
+        return (<div>
+            <h1>Hello,World!</h1>
+            <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+        </div>);
+    }
 }
 export default App;
 
