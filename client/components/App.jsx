@@ -1,35 +1,39 @@
 import React from 'react';
 class App extends React.Component {
     render() {
-        return (<Reservation/>)
+        return (<div><Calculator /></div>)
     }
 }
-class Reservation extends React.Component {
-    constructor(props) {
+const scaleNames = {
+    c: 'Celcius',
+    f: 'Fahrenheit'
+};
+class Calculator extends React.Component {
+
+    render() {
+        return (<div><TemperatureInput scale="c"/>
+            <TemperatureInput scale="f"/></div>);
+    }
+}
+class TemperatureInput extends React.Component {
+
+    constructor(props){
         super(props);
-        this.state = {
-            isGoing: true,
-            numberOfGuests: 2
-        };
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleTemperatureChange = this.handleTemperatureChange.bind(this);
+        this.state = {temperature:''};
     }
 
-    handleInputChange(event){
-        const target = event.target;
-        const value = target.type == 'checkbox'? target.checked:target.value;
-        const name  = target.name;
-        this.setState({[name]: value});//compute the target name on the fly.
+    handleTemperatureChange(e){
+        this.setState({temperature:e.target.value});
     }
 
     render() {
-        return (
-            <form>
-                Is going:<input name="isGoing" checked={this.state.isGoing} type="checkbox"
-                                onChange={this.handleInputChange}/>
-                Number of guests:<input name="numberOfGuests" type="text" value={this.state.numberOfGuests}
-                                        onChange={this.handleInputChange}/>
-            </form>
-        );
+        let scale = this.props.scale;
+        let temperature = this.state.temperature;
+        return (<fieldset>
+            <label>Enter temperature in {scaleNames[scale]}:</label>
+            <input name={scaleNames[scale]} value={temperature} onChange={this.handleTemperatureChange}/>
+        </fieldset>);
     }
 }
 export default App;
