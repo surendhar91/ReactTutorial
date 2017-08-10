@@ -1,75 +1,55 @@
 import React from 'react';
 class App extends React.Component {
     render() {
-        return (<div><Calculator /></div>)
+        return (<div><SignUpDialog /></div>)
     }
 }
-const scaleNames = {
-    c: 'Celcius',
-    f: 'Fahrenheit'
-};
-class Calculator extends React.Component {
-    //Move the state up
-    constructor(props) {
+function FancyBorder(props){
+    //all the elements inside <FancyBorder></FancyBorder> are called as children.
+    //if we want we can also call like this <FancyBorder left = {<Contacts/>} right = {<Chat />} />
+    return (<div className={"FancyBorder FancyBorder-"+ props.color}>
+            {props.children}
+    </div>
+    );
+}
+function Dialog(props){
+    return (<div><FancyBorder color="blue">
+        <h1 className="Dialog-title">
+            {props.title}
+        </h1>
+        <p className="Dialog-message">
+            {props.message}
+        </p>
+        {props.children}
+    </FancyBorder></div>);
+}
+class SignUpDialog extends React.Component{
+    constructor(props){
         super(props);
-        this.state = {temperature: '', scale: 'c'}
-        this.handleTemperatureChange = this.handleTemperatureChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.state = {loginName:''};
     }
 
-    handleTemperatureChange(e) {
-        let name = e.target.name;
-        this.setState({temperature: e.target.value, scale: name});
+    handleInputChange(event){
+        const value = event.target.value;
+        this.setState({loginName:value});
     }
 
-
-    render() {
-        let scale = this.state.scale;
-        let temperature = this.state.temperature;
-        const celsius = (scale=='f')?this.tryConvert(temperature, this.toCelsius):temperature;
-        const fahrenhit = (scale=='c')?this.tryConvert(temperature, this.toFahrenheit):temperature;
-        return (<div>
-            <TemperatureInput scale='c' temperature={celsius} onTemperatureChange={this.handleTemperatureChange} />
-            <TemperatureInput scale='f' temperature={fahrenhit} onTemperatureChange={this.handleTemperatureChange} />
-            <BoilingVerdict celsius = {celsius} />
-        </div>);
-    }
-
-    tryConvert(temperature, convert) {
-        const input = parseFloat(temperature);
-        if (Number.isNaN(input)) {
-            return '';
+    handleOnSubmit(){
+        if(this.state.loginName!='') {
+            alert('Welcome onboard,  '+this.state.loginName);
+        }else{
+            alert("Enter login name!")
         }
-        const output = convert(input);
-        const rounded = Math.round(output * 1000) / 1000;
-        return rounded.toString();
     }
 
-    toCelsius(fahrenheit) {
-        return (fahrenheit - 32) * 5 / 9;
+    render(){
+        return (<Dialog title="Mars Exploration Program" message="How should we refer to you?">
+            <input type="text" value={this.state.loginName} onChange={this.handleInputChange} />
+            <button name="Sign Me Up!" onClick={this.handleOnSubmit}>Sign Me Up!</button>
+        </Dialog>);
     }
-
-    toFahrenheit(celsius) {
-        return (celsius * 9 / 5) + 32;
-    }
-}
-class TemperatureInput extends React.Component {
-
-
-    render() {
-        let scale = this.props.scale;
-        let temperature = this.props.temperature;
-        let onTemperatureChange = this.props.onTemperatureChange;
-        return (<fieldset>
-            <label>Enter temperature in {scaleNames[scale]}:</label>
-            <input name={scale} value={temperature} onChange={onTemperatureChange}/>
-        </fieldset>);
-    }
-}
-function BoilingVerdict(props){
-    if(props.celsius>=100){
-        return <p>The water would boil</p>;
-    }
-    return <p>The water would not boil</p>;
 }
 export default App;
 
